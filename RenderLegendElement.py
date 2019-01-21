@@ -98,9 +98,6 @@ def create_legend_stylesheet(inputstylesheet):#,outputstylesheet):
                     if par.getAttribute('name') == "table":
                         query = par.firstChild.nodeValue
                         # little clean up
-                        query = query.replace('\n',' ').strip(' ')
-                        while query.find('  ') != -1:
-                            query = query.replace('  ',' ')
                         if stylename in queriesToFilter:
                             queriesToFilter[stylename].append(\
                              queryToFilter(query))
@@ -239,7 +236,11 @@ def queryToFilter(sql):
     
     query=sql.lower()
     # First, keep only the interesting part of the query
-    
+
+    # flatten whitespace
+    query = re.sub('\s+',' ',query)
+    query.strip(' ')
+
     # exit from the function if not present:
     try: queryFilter=query.split('where ')[1]
     except: return ''
