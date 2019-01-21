@@ -238,6 +238,9 @@ def queryToFilter(sql):
     query=sql.lower()
     # First, keep only the interesting part of the query
 
+    # remove single line trailing comments
+    query = re.sub('--.*\n', '\n', sql.lower())
+
     # flatten whitespace
     query = re.sub('\s+',' ',query)
     query.strip(' ')
