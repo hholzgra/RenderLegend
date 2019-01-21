@@ -278,6 +278,7 @@ def queryToFilter(sql):
     # remove key if'key is null'
     queryFilter=re.sub('([a-zA-Z:0-9_;]*\sis\snull\sor\s[a-zA-Z:0-9_;]*\s(not\s)*in\s\([^)]*\))|([a-zA-Z:0-9_;]*\sis\snull\sor\s[a-zA-Z:0-9_;]*\s*<>\s*[\'a-zA-Z:0-9_;]*)','',queryFilter)
     queryFilter=re.sub('[a-zA-Z:0-9_;]*\sis\snull\sand','',queryFilter)
+    queryFilter=re.sub('and\s[a-zA-Z:0-9_;]*\sis\snull','',queryFilter)
     #XXX added lately, to be tested:
     queryFilter=re.sub('[a-zA-Z:0-9_;]*\sis\snull','',queryFilter)
     # symplify not in ('no','false','0')
