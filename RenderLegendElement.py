@@ -245,6 +245,17 @@ def queryToFilter(sql):
     query = re.sub('\s+',' ',query)
     query.strip(' ')
 
+    # recurse if it is actually a UNION
+    if " union all " in query:
+        queries = query.split(" union all ")
+        filters = []
+        for q in queries:
+            f = queryToFilter(q + " ) as xxx")
+            filters.append(f)
+        joined_queries = " ) or ( " . join(filters)
+        result = "( " + joined_queries + " )"
+        return result
+
     # exit from the function if not present:
     try: queryFilter=query.split('where ')[1]
     except: return ''
