@@ -268,11 +268,11 @@ def queryToFilter(sql):
     
     
     # change tags operators to compatible ones with rule filters syntax
-    while (queryFilter.find('is not null')<> -1):
+    while (queryFilter.find('is not null') != -1):
         queryFilter=queryFilter.replace('is not null','<>\'\'')
-    while (queryFilter.find('!=')<> -1):
+    while (queryFilter.find('!=') != -1):
         queryFilter=queryFilter.replace('!=','<>')
-    while (queryFilter.find('\"') <> -1):
+    while (queryFilter.find('\"') != -1):
         queryFilter=queryFilter.replace('\"','')
     
     # remove key if'key is null'
