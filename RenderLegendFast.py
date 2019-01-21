@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 """
 
 """
@@ -7,15 +7,13 @@ from mapnik import Osm, Map, load_map, save_map # allow us to change the mapFile
 from RenderLegendElement import createOsmElement, create_legend_stylesheet
 
 import re
-import StringIO
+import io
 import tempfile
 import os
 import xml.dom.minidom as minidom
 from xml.dom.minidom import getDOMImplementation
 from lxml import etree
-import Image
-import ImageChops
-import ImageFile
+from PIL import Image, ImageChops, ImageFile
 
 # lat-lon geometry elements
 # faclat is the 'width' factor defining a common width for elements
@@ -98,11 +96,11 @@ for zoom in range(1,19):
         im = mapnik.Image(width,height)
         
         mapnik.render(m, im)
-        #print osmFile.read()
+        #print(osmFile.read())
         osmFile.close() # closing the datasource
 
         view = im.view(0,0,width,height) # x,y,width,height
-        #print "saving ", map_uri
+        #print("saving %s" % map_uri)
         #view.save(map_uri,'png')
         
         #'save' the image in a string
@@ -118,7 +116,7 @@ for zoom in range(1,19):
         img = imgParser.close()
         
         if len(img.getcolors()) == 1:
-            print "empty file not saved", map_uri
+            print("empty file not saved %s" % map_uri)
             #delete the pic file if empty
             #os.remove(map_uri)
         else:
@@ -129,7 +127,7 @@ for zoom in range(1,19):
             imgbg=ImageChops.constant(img256,img256.getpixel((0,0)))
             box=ImageChops.difference(img256, imgbg).getbbox()
             out=img.crop(box)
-            print "saving ", map_uri
+            print("saving %s" % map_uri)
             out.save(map_uri)
             
 

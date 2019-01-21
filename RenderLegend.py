@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 #__license__ = "GPL"
 __author__ = "Yves Cainaud"
 from RenderLegendElement import renderLegendElement

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # This script is (really) a work in progress
 """
 Input:
@@ -38,16 +38,14 @@ import mapnik
 from mapnik import Osm, Map, load_map, save_map # allow us to change the mapFile datasource
 
 import re
-import StringIO
+import io
 import tempfile
 import os
 import pdb
 import xml.dom.minidom
 from xml.dom.minidom import getDOMImplementation
 from lxml import etree
-import Image
-import ImageChops
-import ImageFile
+from PIL import Image, ImageChops, ImageFile
 
 # lat-lon geometry elements
 # faclat is the 'width' factor defining a common width for elements
@@ -103,7 +101,7 @@ def create_legend_stylesheet(inputstylesheet):#,outputstylesheet):
                         query = query.replace('\n',' ').strip(' ')
                         while query.find('  ') != -1:
                             query = query.replace('  ',' ')
-                        if queriesToFilter.has_key(stylename):
+                        if stylename in queriesToFilter:
                             queriesToFilter[stylename].append(\
                              queryToFilter(query))
                         else:
@@ -344,7 +342,7 @@ def createOsmElement(elementType, tagList, zoom):
     # * -text elements contain the tag [name]='name'
     # * lineshield contains a [ref]='ref' tag, although the elements are
     #    probbaly not long enough to see any ShieldSymbolizer FIXME 
-    fosm = StringIO.StringIO()
+    fosm = io.StringIO()
     fosm.write("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\
     <osm version=\"0.6\" generator=\"legend2osm\">\n\
     <bounds minlat=\"-85\" minlon=\"-180\" maxlat=\"85\" maxlon=\"180\"/>\n")
@@ -681,7 +679,7 @@ def renderLegendElement(sourceFile, elementType, tagList, zoom, imageWidth, map_
     mapnik.render(m, im)
     osmFile.close() # closing the datasource
     view = im.view(0,0,width,height) # x,y,width,height
-    #print "saving ", map_uri
+    #print("saving %s" % map_uri)
     #view.save(map_uri,'png')
     
     #'save' the image in a string
@@ -697,7 +695,7 @@ def renderLegendElement(sourceFile, elementType, tagList, zoom, imageWidth, map_
     img = imgParser.close()
     
     if len(img.getcolors()) == 1:
-        print "empty file not saved", map_uri
+        print("empty file not saved %s" % map_uri)
         #delete the pic file if empty
         #os.remove(map_uri)
     else:
@@ -708,7 +706,7 @@ def renderLegendElement(sourceFile, elementType, tagList, zoom, imageWidth, map_
         imgbg=ImageChops.constant(img256,img256.getpixel((0,0)))
         box=ImageChops.difference(img256, imgbg).getbbox()
         out=img.crop(box)
-        print "saving ", map_uri
+        print("saving %s" % map_uri)
         out.save(map_uri)
         
     return True
