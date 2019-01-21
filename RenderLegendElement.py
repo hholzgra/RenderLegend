@@ -223,7 +223,7 @@ def create_legend_stylesheet(inputstylesheet):#,outputstylesheet):
         t.appendChild(ptext)
         
         f=doc.createElement("Parameter")
-        datasource[0].appendChild(t).setAttribute("name", "file")
+        datasource[0].appendChild(f).setAttribute("name", "file")
         ptext = doc.createTextNode(createEmptyOsm().name)
         f.appendChild(ptext)
     return str(doc.toxml())
