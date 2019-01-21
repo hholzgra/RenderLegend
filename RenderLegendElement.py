@@ -265,8 +265,12 @@ def queryToFilter(sql):
     queryFilter=queryFilter.strip(' ')
     if queryFilter[-1] == (')'): queryFilter=queryFilter[:-1]
     queryFilter=queryFilter.split('order ')[0]
-    
-    
+
+    # handle hstore key tags
+    queryFilter = re.sub('tags\s*@>\s*\'([a-zA-Z:0-9_;"]+)=>([a-zA-Z:0-9_;]+)\'', '\g<1>=\'\g<2>\'', queryFilter)
+    queryFilter = re.sub('\(tags->\'([a-zA-Z:0-9_;]+)\'\)', '\g<1>', queryFilter)
+    queryFilter = re.sub('tags->\'([a-zA-Z:0-9_;]+)\'', '\g<1>', queryFilter)
+
     # change tags operators to compatible ones with rule filters syntax
     while (queryFilter.find('is not null') != -1):
         queryFilter=queryFilter.replace('is not null','<>\'\'')
